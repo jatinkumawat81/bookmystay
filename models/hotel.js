@@ -4,29 +4,53 @@ const hotelSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Hotel name is required'],
-        unique: [true, 'Hotel name must be unique'],
-        minLength: [5, 'Hotel name must be at least 5 characters'],
-        maxLength: [100, 'Hotel name must be at most 100 characters']
+        trim: true
     },
     description: {
         type: String,
-        maxLength: [200, 'Description must be at most 200 characters']
+        required: [true, 'Hotel description is required'],
+        trim: true
+    },
+    type: { 
+        type: String,
+        required: [true, 'Hotel type is required']
     },
     city: {
         type: String,
-        required: [true, 'City is required']
+        required: [true, 'Hotel city is required']
     },
-    price: {
-        type: Number,
-        required: [true, 'Price is required'],
-        min: [100, 'Price must be at least 100'],
-        max: [10000, 'Price must be at most 10000']
+    address: {
+        type: String,
+        required: [true, 'Hotel address is required'],
+        trim: true
+    },
+    distance: {
+        type: String,
+        required: [true, 'Hotel distance from airport is required']
+    },
+    images: {
+        type: [String]
     },
     rating: {
         type: Number,
-        max: [5, 'Rating must be at most 5'],
-        default: 1.0
+        min: 0,
+        max: 5
+    },
+    rooms: {
+        type: [String]
+    },
+    cheapestPrice: {
+        type: Number,
+        required: [true, 'Hotel cheapest price is required']
+    },
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    category: {
+        type: [String],
+        required: [true, 'Hotel category is required']
     }
-})
+});
 
 module.exports = mongoose.model('Hotel', hotelSchema, 'hotels');

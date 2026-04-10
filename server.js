@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const app = require('./app');
-const connStr = 'mongodb+srv://admin:1234@cluster0.wbqah1c.mongodb.net/bookmystay?appName=Cluster0&retryWrites=true&w=majority';
+const connStr = "mongodb://localhost:27017/bookmystay";
 mongoose.connect(connStr)
 .then((conn)=>{
     console.log('Connected to MongoDB');

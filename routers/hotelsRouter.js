@@ -7,6 +7,8 @@ hotelRouter.route('/')
     .post(hotelController.create);
 
 hotelRouter.route('/:id')
-    .get(hotelController.getById);
+    .get(hotelController.getById)
+    .put(hotelController.update)
+    .delete(hotelController.delete);
 
 module.exports = hotelRouter;
