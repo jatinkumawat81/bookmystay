@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config({
+    path: './config.env'
+});
+
 const app = require('./app');
-const connStr = "mongodb://localhost:27017/bookmystay";
+const connStr = process.env.CONNECTION_STRING;
+
 mongoose.connect(connStr)
 .then((conn)=>{
     console.log('Connected to MongoDB');
@@ -12,7 +18,7 @@ mongoose.connect(connStr)
 // db.on('disconnected', ()=>{
 //     console.log('MongoDB disconnected');
 // });
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log('Server is running on port ' + port);
 });
