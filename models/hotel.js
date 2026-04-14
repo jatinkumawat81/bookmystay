@@ -51,6 +51,12 @@ const hotelSchema = new mongoose.Schema({
         type: [String],
         required: [true, 'Hotel category is required']
     }
+},{
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
+hotelSchema.virtual('isPremium').get(function(){
+    return this.rating >= 4.5 && this.cheapestPrice >= 500;
+});
 module.exports = mongoose.model('Hotel', hotelSchema, 'hotels');
