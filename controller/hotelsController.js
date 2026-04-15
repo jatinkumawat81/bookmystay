@@ -68,7 +68,7 @@ exports.update = async (req, res)=>{
     try{
         const _id = req.params.id;
         const body = req.body;
-        const hotel = await Hotel.findByIdAndUpdate(_id, body, {new: true, runValidators: true});
+        const hotel = await Hotel.findOneAndUpdate({_id: _id}, body, {new: true, runValidators: true});
         res.status(200).json({
             status: 'success',
             data: {
