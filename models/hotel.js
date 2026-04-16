@@ -77,7 +77,7 @@ hotelSchema.pre('save', function(){
 });
 
 hotelSchema.post('save', function(doc,next){
-    const content = `${new Date()}: A new hotel named "${doc.name}" was created by: ${doc.createdBy}\n`;
+    const content = `${new Date()}: A new hotel named "${doc?.name}" was created by: ${doc?.createdBy}\n`;
     fs.writeFileSync('./logs/logs.txt', content, { flag: 'a' }, (err)=>{
         console.error('Error writing to log file:', err);
     });
@@ -94,7 +94,7 @@ hotelSchema.pre('findOneAndUpdate', function(){
     }
 });
 hotelSchema.post('findOneAndUpdate', function(doc, next){
- const content = `${new Date()}: A hotel named "${doc.name}" was updated by: ${doc.createdBy}\n`;
+ const content = `${new Date()}: A hotel named "${doc?.name}" was updated by: ${doc?.createdBy}\n`;
     fs.writeFileSync('./logs/logs.txt', content, { flag: 'a' }, (err)=>{
         console.error('Error writing to log file:', err);
     });

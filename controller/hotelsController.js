@@ -1,9 +1,11 @@
 const ApiFeatures = require('../utilities/features');
 const Hotel = require('../models/hotel'); 
+const AppError = require('../utilities/appError');
+const catchAsync = require('../utilities/catchAsync');
 
-exports.getAll = async (req, res)=>{
+
+exports.getAll = catchAsync(async (req, res, next)=>{
     const features = new ApiFeatures(Hotel.find(),req.query);
-    try{
         const query = features.filter().sort().limitFields().paginate().queryObj;
  
         const hotels = await query;
@@ -18,80 +20,58 @@ exports.getAll = async (req, res)=>{
                 }
             }
         );
-    }catch(err){
-        res.status(500).json({
-            message: 'Error fetching hotels',
-            error: err.message
-        });
-    }
-}
+})
 
-exports.create = async (req, res)=>{
-    try{
-        // const hotel = new Hotel(req.body);
-        // const savedHotel = await hotel.save();
-        const hotel = await Hotel.create(req.body);
-        res.status(201).json({
-            status: 'success',
-            message: 'Hotel created successfully',
-            data: {
-                hotel
-            }
-        });
-    }catch(err){
-        res.status(400).json({
-            message: 'Error creating hotel',
-            error: err.message
-        });
-    }
-}
+exports.create = catchAsync(async (req, res, next)=>{
+    const hotel = await Hotel.create(req.body);
+    res.status(201).json({
+        status: 'success',
+        message: 'Hotel created successfully',
+        data: {
+            hotel
+        }
+    });
+})
 
-exports.getById = async (req, res)=>{
-    try{
+exports.getById = catchAsync(async (req, res, next)=>{
         const _id = req.params.id;
         const hotel = await Hotel.findById(_id);
+        if(!hotel){
+            return next(new AppError('Hotel not found', 404));
+        }
         res.status(200).json({
             status: 'success',
             data: {
                 hotel
             }
         });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error fetching hotel',
-            error: err.message
-        });
-    }
-}
+})
 
-exports.update = async (req, res)=>{
-    try{
+exports.update = catchAsync(async (req, res, next)=>{
         const _id = req.params.id;
         const body = req.body;
         const hotel = await Hotel.findOneAndUpdate({_id: _id}, body, {new: true, runValidators: true});
+        if(!hotel){
+            return next(new AppError('Hotel not found', 404));
+        }
         res.status(200).json({
             status: 'success',
             data: {
                 hotel
             }
         });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error updating hotel',
-            error: err.message
-        });
-    }
-}
+})
 
-exports.delete = async (req, res)=>{
+exports.delete = catchAsync(async (req, res, next)=>{
     try{
         const _id = req.params.id;
         const hotel = await Hotel.findByIdAndDelete(_id);
+        if(!hotel){
+            return next(new AppError('Hotel not found', 404));
+        }
         res.status(204).json({
             status: 'success',
-            data: {
-                hotel
-            }
+            message: 'Hotel deleted successfully'
         });
     }catch(err){
         res.status(500).json({
@@ -99,7 +79,7 @@ exports.delete = async (req, res)=>{
             error: err.message
         });
     }
-}
+})
 
 // exports.getHotelsStats = async (req, res)=>{
 //     try{
@@ -197,8 +177,7 @@ exports.delete = async (req, res)=>{
 //     }
 // }
 
-exports.getFeaturedHotels = async (req, res) =>{
-    try{
+exports.getFeaturedHotels = catchAsync(async (req, res, next) =>{
         const featuredHotels = await Hotel.aggregate([
             {
                 $match: { featured: true }
@@ -217,16 +196,9 @@ exports.getFeaturedHotels = async (req, res) =>{
                 hotels: featuredHotels
             }
         });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error fetching featured hotels',
-            error: err.message
-        });
-    }
-}
+})
 
-exports.getHotelsByCity = async (req, res) =>{
-    try{
+exports.getHotelsByCity = catchAsync(async (req, res, next) =>{
         const hotelsByCity = await Hotel.aggregate([
             {
                 $group: {
@@ -254,15 +226,8 @@ exports.getHotelsByCity = async (req, res) =>{
                 hotels: hotelsByCity
             }
         });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error fetching hotels by city',
-            error: err.message
-        });
-    }
-}
-exports.getHotelsByType = async (req, res) =>{
-    try{
+})
+exports.getHotelsByType = catchAsync(async (req, res, next) =>{
         const hotelsByType = await Hotel.aggregate([
             {
                 $group: {
@@ -289,10 +254,4 @@ exports.getHotelsByType = async (req, res) =>{
                 hotels: hotelsByType
             }
         });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error fetching hotels by type',
-            error: err.message
-        });
-    }
-}
+})
