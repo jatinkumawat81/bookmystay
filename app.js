@@ -1,6 +1,7 @@
 const express = require('express');
 const hotelRouter = require('./routers/hotelsRouter');
 const userRouter = require('./routers/usersRouter');
+const authRouter = require('./routers/authRouter');
 const AppError = require('./utilities/appError');
 const globalErrorHandler = require('./controller/errorController');
 const app = express();
@@ -18,6 +19,7 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 app.use('/api/v1/hotels', hotelRouter);
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.all('*splat', (req, res, next) => {
     // res.status(404).json({

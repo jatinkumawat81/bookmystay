@@ -25,6 +25,18 @@ const handleCastError = (err) => {
     const error = new AppError(errMsg, 400);
     return error;
 }
+const duplicateKeyHandler = (err) => {
+    const field = Object.keys(err.keyValue)[0];
+    const value = err.keyValue[field];
+    const errMsg = `Duplicate field value: ${value} for field: ${field}. Please use another value!`;
+    return new AppError(errMsg, 400);
+}
+const handleValidationError = (err) => {
+    const errors = Object.values(err.errors).map(el => el.message);
+    const errMsg = `Invalid input data: ${errors.join(', ')}`;
+    return new AppError(errMsg, 400);
+}
+
 module.exports = (err ,req, res, next)=>{
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
@@ -34,6 +46,12 @@ module.exports = (err ,req, res, next)=>{
         let appError = { ...err };
         if(err.name === 'CastError'){
             appError = handleCastError(err);
+        }
+        if(err.code === 11000){
+            appError = duplicateKeyHandler(appError);
+        }
+        if(err.name === 'ValidationError'){
+            appError = handleValidationError(appError);
         }
        prodErrors(res, appError);
     }

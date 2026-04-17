@@ -6,8 +6,8 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Hotel name is required'],
         trim: true,
-        match: /^[a-zA-Z][a-zA-Z0-9\s\-_]*$/
-    },
+        unique: true,
+        lowercase: true},
     description: {
         type: String,
         required: [true, 'Hotel description is required'],
@@ -39,8 +39,8 @@ const hotelSchema = new mongoose.Schema({
     },
     rating: {
         type: Number,
-        min: 0,
-        max: 5
+        min: [0, 'Rating must be at least 0'],
+        max: [5, 'Rating must be at most 5']
     },
     rooms: {
         type: [String]
