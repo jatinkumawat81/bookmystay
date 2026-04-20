@@ -15,11 +15,11 @@ hotelRouter.route('/get-hotels-by-type')
 //     .get(hotelController.getHotelsByCategory);
 hotelRouter.route('/')
     .get(hotelController.getAll)
-    .post(authController.isAuthenticated, hotelController.create);
+    .post(authController.isAuthenticated, authController.isAuthorized('admin', 'super'), hotelController.create);
 
 hotelRouter.route('/:id')
     .get(hotelController.getById)
-    .put(authController.isAuthenticated, hotelController.update)
-    .delete(authController.isAuthenticated, hotelController.delete);
+    .put(authController.isAuthenticated, authController.isAuthorized('admin'), hotelController.update)
+    .delete(authController.isAuthenticated, authController.isAuthorized('admin', 'super'), hotelController.delete);
 
 module.exports = hotelRouter;
