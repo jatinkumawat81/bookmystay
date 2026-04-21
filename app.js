@@ -20,7 +20,7 @@ if(process.env.NODE_ENV === 'development'){
 
 app.use('/api/v1/hotels', hotelRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/user', userRouter);
 app.all('*splat', (req, res, next) => {
     // res.status(404).json({
     //     status: 'fail',

@@ -49,7 +49,12 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     resetToken: String,
-    resetTokenExpiresAt: Date
+    resetTokenExpiresAt: Date,
+    isActive: {
+        type: Boolean,
+        default: true,
+        select: false
+    }
 }, { timestamps: true });
 
 userSchema.pre('save', async function(){
@@ -77,7 +82,9 @@ userSchema.methods.generateResetToken = function(){
     this.resetTokenExpiresAt = Date.now() + (10 * 60 * 1000);
     return resetToken
 }
-
+userSchema.pre(/^find/, async function(){
+   this.find({ isActive: true });
+});
 const user = mongoose.model('User', userSchema);
 
 module.exports = user;

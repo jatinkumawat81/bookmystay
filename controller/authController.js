@@ -4,12 +4,9 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("./../utilities/email");
 const crypto = require('crypto');
+const signToken = require("../utilities/signToken");
 
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
+
 exports.signup = catchAsync(async (req, res, next) => {
   const user = await User.create(req.body);
   const token = signToken(user._id);
