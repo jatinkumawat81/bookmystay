@@ -6,5 +6,6 @@ const authController = require('../controller/authController');
 userRouter.route("/updatePassword").patch(authController.isAuthenticated, userController.updatePassword);
 userRouter.route("/updateMe").patch(authController.isAuthenticated, userController.updateMe);
 userRouter.route("/deleteMe").delete(authController.isAuthenticated, userController.deleteMe);
+userRouter.route("/me").get(authController.isAuthenticated, userController.getMe);
 
 module.exports = userRouter;

@@ -54,6 +54,30 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
         select: false
+    },
+    bio: {
+        type: String,
+        maxlength: [1000, 'Bio must be less than 1000 characters']
+    },
+    address: {
+        city: String,
+        country: String
+    },
+    contact: {
+         altEmail: {
+            type: String,
+            lowercase: true,
+            trim: true,
+            validate: [validator.isEmail, 'Please provide a valid email']
+        },
+        code: {
+            type: String,
+            default: '+91',
+        },
+        phone: {
+            type: String,
+            validate: [validator.isMobilePhone, 'Please provide a valid phone number']
+        }
     }
 }, { timestamps: true });
 
