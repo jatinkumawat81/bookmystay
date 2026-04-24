@@ -26,9 +26,28 @@ const hotelSchema = new mongoose.Schema({
         required: [true, 'Hotel city is required']
     },
     address: {
-        type: String,
-        required: [true, 'Hotel address is required'],
-        trim: true
+        addressLine1: {
+            type: String,
+            required: [true, 'Hotel address line 1 is required'],
+            maxlength: [100, 'Hotel address line 1 must be less than 100 characters']
+        },
+        addressLine2: {
+            type: String,
+            maxlength: [100, 'Hotel address line 2 must be less than 100 characters']
+        },
+        landmark: {
+            type: String,
+            maxlength: [100, 'Hotel landmark must be less than 100 characters']
+        },
+        zipCode: {
+            type: String,
+            required: [true, 'Hotel zip code is required'],
+            match: [/^\d{5}(-\d{4})?$/, 'Hotel zip code must be a valid US zip code']
+        },
+        location: {
+            type: {type: String, enum: ['Point'], default: 'Point'},
+            coordinates: [Number]
+        }
     },
     distance: {
         type: String,

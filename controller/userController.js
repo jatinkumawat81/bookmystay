@@ -44,6 +44,16 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     const userDetailsToUpdate = {
         firstName: req.body.firstName || user.firstName,
         lastName: req.body.lastName || user.lastName,
+        bio: req.body.bio || user.bio,
+        address: {
+            city: req.body.city || user.address.city,
+            country: req.body.country || user.address.country
+        },
+        contact: {
+            altEmail: req.body.altEmail || user.contact.altEmail,
+            code: req.body.code || user.contact.code,
+            phone: req.body.phone || user.contact.phone
+        }
     };
     const updatedUser = await User.findByIdAndUpdate(req.user._id, userDetailsToUpdate, { new: true, runValidators: true });
     
