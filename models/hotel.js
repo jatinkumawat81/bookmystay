@@ -42,7 +42,7 @@ const hotelSchema = new mongoose.Schema({
         zipCode: {
             type: String,
             required: [true, 'Hotel zip code is required'],
-            match: [/^\d{5}(-\d{4})?$/, 'Hotel zip code must be a valid US zip code']
+            match: [/^[1-9][0-9]{5}$/, 'Hotel zip code must be a valid US zip code']
         },
         location: {
             type: {type: String, enum: ['Point'], default: 'Point'},
