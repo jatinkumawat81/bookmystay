@@ -61,9 +61,10 @@ const hotelSchema = new mongoose.Schema({
         min: [0, 'Rating must be at least 0'],
         max: [5, 'Rating must be at most 5']
     },
-    rooms: {
-        type: [String]
-    },
+    rooms:[ {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room'
+    }],
     cheapestPrice: {
         type: Number,
         required: [true, 'Hotel cheapest price is required']
@@ -76,14 +77,25 @@ const hotelSchema = new mongoose.Schema({
         type: [String],
         required: [true, 'Hotel category is required']
     },
-    createdBy: String
+    createdBy: String,
+    isDeleted: {
+        type: Boolean,
+        default: false,
+        select: false
+    }
 },{
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
 
-hotelSchema.virtual('isPremium').get(function(){
-    return this.rating >= 4.5 && this.cheapestPrice >= 500;
+// hotelSchema.virtual('isPremium').get(function(){
+//     return this.rating >= 4.5 && this.cheapestPrice >= 500;
+// });
+
+hotelSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'hotel'
 });
 
 hotelSchema.pre('save', function(){
@@ -104,7 +116,7 @@ hotelSchema.post('save', function(doc,next){
 });
 
 hotelSchema.pre('find', function(){
-    this.find({ isDeleted: false });
+    this.find({ isDeleted: { $ne: true } });
 });
 hotelSchema.pre('findOneAndUpdate', function(){
     const update = this.getUpdate();

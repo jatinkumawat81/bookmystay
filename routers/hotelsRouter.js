@@ -1,8 +1,12 @@
 const hotelController = require('./../controller/hotelsController');
 const express = require('express');
 const authController = require('../controller/authController');
+const roomsRouter = require('./roomsRouter');
+const reviewRouter = require('./reviewRouter');
 const hotelRouter = express.Router();
 
+hotelRouter.use('/:hotelId/rooms', roomsRouter);
+hotelRouter.use('/:hotelId/reviews', reviewRouter);
 hotelRouter.route('/get-featured')
     .get(hotelController.getFeaturedHotels);
 hotelRouter.route('/get-hotels-by-city')

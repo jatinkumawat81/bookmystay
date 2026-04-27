@@ -35,7 +35,13 @@ exports.create = catchAsync(async (req, res, next)=>{
 
 exports.getById = catchAsync(async (req, res, next)=>{
         const _id = req.params.id;
-        const hotel = await Hotel.findById(_id);
+        const hotel = await Hotel.findById(_id).populate({
+            path: 'rooms',
+            select: '-__v'
+        }).populate({
+            path: 'reviews',
+            select: '-__v'
+        });
         if(!hotel){
             return next(new AppError('Hotel not found', 404));
         }
@@ -63,22 +69,15 @@ exports.update = catchAsync(async (req, res, next)=>{
 })
 
 exports.delete = catchAsync(async (req, res, next)=>{
-    try{
-        const _id = req.params.id;
-        const hotel = await Hotel.findByIdAndDelete(_id);
-        if(!hotel){
-            return next(new AppError('Hotel not found', 404));
-        }
-        res.status(204).json({
-            status: 'success',
-            message: 'Hotel deleted successfully'
-        });
-    }catch(err){
-        res.status(500).json({
-            message: 'Error deleting hotel',
-            error: err.message
-        });
+    const _id = req.params.id;
+    const hotel = await Hotel.findByIdAndDelete(_id);
+    if(!hotel){
+        return next(new AppError('Hotel not found', 404));
     }
+    res.status(204).json({
+        status: 'success',
+        message: 'Hotel deleted successfully'
+    });
 })
 
 // exports.getHotelsStats = async (req, res)=>{
