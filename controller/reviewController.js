@@ -3,6 +3,7 @@ const catchAsync = require('../utilities/catchAsync');
 const Review = require('../models/review');
 const Hotel = require('../models/hotel');
 const User = require('../models/user');
+const factory = require('./handlerFactory');
 
 exports.create = catchAsync(async (req, res, next)=>{
     const reviewData = {
@@ -32,3 +33,7 @@ exports.getAll = catchAsync(async (req, res, next)=>{
         }
     });
 });
+
+exports.delete = factory.deleteOne(Review, 'Review');
+
+exports.update = factory.updateOne(Review, 'Review');

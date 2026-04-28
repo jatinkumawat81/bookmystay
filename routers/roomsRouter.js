@@ -8,7 +8,7 @@ roomsRouter.route('/')
     .get(roomsController.getAll)
 roomsRouter.route('/:id')
     .get(roomsController.getById)
-    // .put(authController.isAuthenticated, authController.isAuthorized('admin'), roomsController.update)
+    .patch(authController.isAuthenticated, authController.isAuthorized('admin'), roomsController.update)
     .delete(authController.isAuthenticated, authController.isAuthorized('admin'), roomsController.delete)
 
 module.exports = roomsRouter;

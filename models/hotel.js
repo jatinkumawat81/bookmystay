@@ -25,6 +25,10 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Hotel city is required']
     },
+    country: {
+        type: String,
+        required: [true, 'Hotel country is required']
+    },
     address: {
         addressLine1: {
             type: String,
@@ -56,10 +60,15 @@ const hotelSchema = new mongoose.Schema({
     images: {
         type: [String]
     },
-    rating: {
+    avgrating: {
         type: Number,
+        default: 3,
         min: [0, 'Rating must be at least 0'],
         max: [5, 'Rating must be at most 5']
+    },
+    reviewsCount: {
+        type: Number,
+        default: 0
     },
     rooms:[ {
         type: mongoose.Schema.Types.ObjectId,
