@@ -19,6 +19,11 @@ exports.updateOne = (Model, name) => catchAsync(async (req, res, next)=>{
         if(!document){
             return next(new AppError(`${name} not found`, 404));
         }
+        //For room model, we want to call calcCheapestPrice after updating the room price
+        if(Model.name === 'Room') {
+            const hotelId = _id;
+            await Model.calcCheapestPrice(hotelId);
+        }
         res.status(200).json({
             status: 'success',
             data: {

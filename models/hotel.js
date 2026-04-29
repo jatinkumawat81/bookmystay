@@ -91,6 +91,28 @@ const hotelSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         select: false
+    },
+    amenities: {
+        swimmingPool: {
+            type: Boolean,
+            default: false
+        },
+        gym: {
+            type: Boolean,
+            default: false
+        },
+        powerBackup: {
+            type: Boolean,
+            default: false
+        },
+        freeWifi: {
+            type: Boolean,
+            default: false
+        },
+        miniBar: {
+            type: Boolean,
+            default: false
+        }
     }
 },{
     toJSON: { virtuals: true },
