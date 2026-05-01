@@ -10,6 +10,16 @@ const signToken = require("../utilities/signToken");
 exports.signup = catchAsync(async (req, res, next) => {
   const user = await User.create(req.body);
   const token = signToken(user._id);
+  let cookieOptions = {
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    httpOnly: true,
+    // secure: true,
+    // sameSite: "strict",
+  };
+  if(process.env.NODE_ENV === "production"){
+    cookieOptions.secure = true;
+  }
+  res.cookie("access_token", token, cookieOptions);
   res.status(201).json({
     status: "success",
     message: "User created successfully",
@@ -36,6 +46,16 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Incorrect password", 401));
   }
   const token = signToken(user._id);
+  let cookieOptions = {
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    httpOnly: true,
+    // secure: true,
+    // sameSite: "strict",
+  };
+  if(process.env.NODE_ENV === "production"){
+    cookieOptions.secure = true;
+  }
+  res.cookie("access_token", token, cookieOptions);
   res.status(201).json({
     status: "success",
     message: "User logged in successfully",

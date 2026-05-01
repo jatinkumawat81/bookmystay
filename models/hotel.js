@@ -6,7 +6,6 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Hotel name is required'],
         trim: true,
-        unique: true,
         lowercase: true},
     description: {
         type: String,
@@ -60,7 +59,7 @@ const hotelSchema = new mongoose.Schema({
     images: {
         type: [String]
     },
-    avgrating: {
+    avgRating: {
         type: Number,
         default: 3,
         min: [0, 'Rating must be at least 0'],
@@ -122,6 +121,8 @@ const hotelSchema = new mongoose.Schema({
 // hotelSchema.virtual('isPremium').get(function(){
 //     return this.rating >= 4.5 && this.cheapestPrice >= 500;
 // });
+
+hotelSchema.index({ cheapestPrice: 1, avgRating: -1 });
 
 hotelSchema.virtual('reviews', {
     ref: 'Review',
